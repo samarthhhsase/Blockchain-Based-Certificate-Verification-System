@@ -1,0 +1,6 @@
+{
+  "watch": ["backend", "server.js"],
+  "ext": "js,json",
+  "ignore": ["node_modules", "frontend", "blockchain", "contract"],
+  "exec": "node server.js"
+}

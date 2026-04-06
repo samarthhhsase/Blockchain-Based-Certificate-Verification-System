@@ -1,0 +1,6 @@
+git add .
+git commit -m "Added .gitignore"
+git push
+.env
+.vscode/
+*.db

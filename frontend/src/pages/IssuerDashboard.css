@@ -1,0 +1,153 @@
+﻿.issuer-dashboard-page {
+  position: relative;
+  min-height: 100vh;
+  padding: 28px;
+  background: linear-gradient(135deg, #f6fbff 0%, #eef4ff 45%, #e9f3ff 100%);
+  overflow: hidden;
+}
+
+.issuer-dashboard-glow {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 10% 10%, rgba(59, 130, 246, 0.14), transparent 30%),
+    radial-gradient(circle at 90% 20%, rgba(14, 165, 233, 0.14), transparent 34%),
+    radial-gradient(circle at 70% 80%, rgba(37, 99, 235, 0.1), transparent 30%);
+}
+
+.issuer-dashboard-shell {
+  position: relative;
+  z-index: 1;
+  max-width: 980px;
+  margin: 0 auto;
+}
+
+.issuer-dashboard-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+.issuer-badge {
+  display: inline-block;
+  margin: 0 0 8px;
+  border-radius: 999px;
+  padding: 6px 12px;
+  background: #dbeafe;
+  color: #1d4ed8;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.issuer-dashboard-header h1 {
+  margin: 0;
+  color: #0f172a;
+  font-size: 34px;
+  line-height: 1.2;
+}
+
+.issuer-subtitle {
+  margin: 8px 0 0;
+  color: #475569;
+  font-size: 15px;
+}
+
+.issuer-logout-btn {
+  border: 0;
+  border-radius: 12px;
+  padding: 11px 18px;
+  background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, opacity 0.15s ease;
+}
+
+.issuer-logout-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 12px 20px rgba(220, 38, 38, 0.25);
+}
+
+.issuer-logout-btn:active {
+  transform: translateY(0);
+}
+
+.issuer-info-card {
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid rgba(191, 219, 254, 0.7);
+  box-shadow: 0 18px 40px rgba(15, 23, 42, 0.08);
+  padding: 24px;
+}
+
+.issuer-info-card h2 {
+  margin: 0 0 18px;
+  color: #0f172a;
+  font-size: 21px;
+}
+
+.issuer-info-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.issuer-info-item {
+  border-radius: 12px;
+  padding: 14px;
+  background: #f8fbff;
+  border: 1px solid #dbeafe;
+}
+
+.issuer-info-label {
+  display: block;
+  color: #64748b;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin-bottom: 6px;
+}
+
+.issuer-info-value {
+  display: block;
+  color: #0f172a;
+  font-size: 16px;
+  font-weight: 700;
+  word-break: break-word;
+}
+
+@media (max-width: 860px) {
+  .issuer-dashboard-header {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .issuer-logout-btn {
+    width: fit-content;
+  }
+
+  .issuer-info-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 560px) {
+  .issuer-dashboard-page {
+    padding: 16px;
+  }
+
+  .issuer-dashboard-header h1 {
+    font-size: 28px;
+  }
+
+  .issuer-info-card {
+    padding: 18px;
+  }
+}

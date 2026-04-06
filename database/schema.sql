@@ -1,0 +1,121 @@
+DROP DATABASE IF EXISTS certificate_management;
+CREATE DATABASE certificate_management;
+USE certificate_management;
+
+-- USERS TABLE
+CREATE TABLE users (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  username VARCHAR(120) NOT NULL UNIQUE,
+  email VARCHAR(150) NOT NULL UNIQUE,
+  password VARCHAR(255) NOT NULL,
+  role ENUM('admin','issuer','student') NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+-- ADMINS TABLE
+CREATE TABLE admins (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  school_name VARCHAR(255) NOT NULL,
+  admin_name VARCHAR(150) NOT NULL,
+  login_id VARCHAR(100) NOT NULL UNIQUE,
+  email VARCHAR(150) NOT NULL UNIQUE,
+  password VARCHAR(255) NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- ISSUERS TABLE
+CREATE TABLE issuers (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  user_id INT NOT NULL UNIQUE,
+  admin_id INT NULL,
+  name VARCHAR(150) NOT NULL,
+  email VARCHAR(150) NOT NULL UNIQUE,
+  password VARCHAR(255) NOT NULL,
+  institute_name VARCHAR(255) NULL,
+  is_active TINYINT(1) NOT NULL DEFAULT 1,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+  FOREIGN KEY (admin_id) REFERENCES admins(id) ON DELETE SET NULL
+);
+
+-- STUDENTS TABLE
+CREATE TABLE students (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  user_id INT NOT NULL UNIQUE,
+  name VARCHAR(150) NOT NULL,
+  email VARCHAR(150) NOT NULL UNIQUE,
+  password VARCHAR(255) NOT NULL,
+  roll_number VARCHAR(60) UNIQUE,
+  course VARCHAR(220),
+  class_name VARCHAR(50),
+  semester VARCHAR(20),
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+);
+
+-- CERTIFICATES TABLE
+CREATE TABLE certificates (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  certificate_no VARCHAR(50) NOT NULL UNIQUE,
+  student_id INT NOT NULL,
+  issuer_id INT NOT NULL,
+  course VARCHAR(220) NOT NULL,
+  grade VARCHAR(40) NOT NULL,
+  class VARCHAR(10) NOT NULL,
+  student_type VARCHAR(20) NOT NULL,
+  semester VARCHAR(10) NOT NULL,
+  roll_no VARCHAR(60),
+  academic_year VARCHAR(40),
+  certificate_type VARCHAR(120),
+  remarks TEXT,
+  overall_percentage DECIMAL(5,2),
+  issue_date DATE NOT NULL,
+  certificate_hash CHAR(64) NOT NULL,
+  blockchain_tx_hash VARCHAR(255),
+  ipfs_hash VARCHAR(255),
+  status ENUM('Valid','Revoked','Expired','Active') DEFAULT 'Valid',
+  is_revoked BOOLEAN DEFAULT FALSE,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  FOREIGN KEY (student_id) REFERENCES students(id) ON DELETE CASCADE,
+  FOREIGN KEY (issuer_id) REFERENCES issuers(id) ON DELETE CASCADE
+);
+
+CREATE TABLE certificate_subjects (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  certificate_id INT NOT NULL,
+  subject_name VARCHAR(255) NOT NULL,
+  marks_scored DECIMAL(7,2) NOT NULL,
+  out_of DECIMAL(7,2) NOT NULL,
+  subject_percentage DECIMAL(5,2) NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (certificate_id) REFERENCES certificates(id) ON DELETE CASCADE
+);
+
+-- COMPLAINTS TABLE
+CREATE TABLE complaints (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  student_id INT NOT NULL,
+  certificate_id INT NOT NULL,
+  message TEXT NOT NULL,
+  response TEXT,
+  status ENUM('pending','resolved') DEFAULT 'pending',
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  FOREIGN KEY (student_id) REFERENCES students(id) ON DELETE CASCADE,
+  FOREIGN KEY (certificate_id) REFERENCES certificates(id) ON DELETE CASCADE
+);
+
+-- AUDIT LOGS TABLE
+CREATE TABLE audit_logs (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  user_id INT,
+  action VARCHAR(100) NOT NULL,
+  certificate_id INT,
+  old_data TEXT,
+  new_data TEXT,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE SET NULL,
+  FOREIGN KEY (certificate_id) REFERENCES certificates(id) ON DELETE SET NULL
+);
